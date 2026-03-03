@@ -1,0 +1,68 @@
+# ─── Build directories ────────────────────────────────────────────────────────
+build/
+build-*/
+cmake-build-*/
+out/
+_build/
+
+# ─── CMake artifacts ──────────────────────────────────────────────────────────
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+_deps/
+
+# ─── Compiled output ──────────────────────────────────────────────────────────
+*.o
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+*.egg
+.venv/
+venv/
+env/
+
+# ─── Data / weights / logs ────────────────────────────────────────────────────
+data/weights/*.csv
+data/*.csv
+data/*.png
+data/*.json
+*.log
+
+# ─── IDE and editor ───────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# ─── Sanitizer / profiling output ─────────────────────────────────────────────
+*.profraw
+*.profdata
+tsan.log
+asan.log
+
+# ─── Private / personal ───────────────────────────────────────────────────────
+Resume.md
