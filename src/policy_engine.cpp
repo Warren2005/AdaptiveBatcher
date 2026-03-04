@@ -107,9 +107,12 @@ BatchAction PolicyEngine::infer(const MarketFeatures& features) noexcept {
         thread_local std::uniform_real_distribution<float> udist(0.0f, 1.0f);
 
         if (udist(rng) < eps) {
-            // Constraint: never explore into window > 2× current optimal window
+            // Constraint: never explore into window > 2× current optimal window.
+            // When optimal is IMMEDIATE (0μs), bound exploration to FAST (50μs)
+            // so we still gather data from the next tier without thrashing into
+            // SLOW/LAZY during latency-sensitive conditions.
             uint32_t best_window = ACTION_WINDOW_US[best];
-            uint32_t max_allowed = (best_window == 0) ? ACTION_WINDOW_US[NUM_ACTIONS - 1]
+            uint32_t max_allowed = (best_window == 0) ? ACTION_WINDOW_US[1]
                                                       : best_window * 2;
 
             // Collect valid exploration actions

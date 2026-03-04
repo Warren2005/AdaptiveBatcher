@@ -109,9 +109,9 @@ TEST(SafeExploration, ExplorationWithinTwoXBound) {
     EXPECT_GT(non_normal, 0) << "Some exploration should occur";
 }
 
-TEST(SafeExploration, ImmediateActionAllowsAllExploration) {
-    // When best = IMMEDIATE (window=0), max_allowed = last window (500μs)
-    // so all actions are valid for exploration
+TEST(SafeExploration, ImmediateActionBoundsExplorationToFast) {
+    // When best = IMMEDIATE (window=0), max_allowed = FAST (50μs).
+    // Exploration is bounded to {IMMEDIATE, FAST} only — NORMAL/SLOW/LAZY must never appear.
     PolicyEngine::Config cfg;
     cfg.epsilon_initial    = 1.0f;
     cfg.epsilon_final      = 1.0f;
@@ -132,12 +132,11 @@ TEST(SafeExploration, ImmediateActionAllowsAllExploration) {
 
     auto counts = count_actions(pe, f, 5000);
 
-    // Should see all 5 actions explored
-    int non_zero = 0;
-    for (int a = 0; a < NUM_ACTIONS; ++a) {
-        if (counts[a] > 0) ++non_zero;
-    }
-    EXPECT_GE(non_zero, 4) << "Most actions should be explored from IMMEDIATE";
+    // Only IMMEDIATE (0) and FAST (1) should appear
+    EXPECT_EQ(counts[2], 0) << "NORMAL must never be explored from IMMEDIATE";
+    EXPECT_EQ(counts[3], 0) << "SLOW must never be explored from IMMEDIATE";
+    EXPECT_EQ(counts[4], 0) << "LAZY must never be explored from IMMEDIATE";
+    EXPECT_GT(counts[0] + counts[1], 0) << "Some IMMEDIATE/FAST exploration should occur";
 }
 
 TEST(SafeExploration, ColdStartEpsilonDecay) {

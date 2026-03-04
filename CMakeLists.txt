@@ -114,6 +114,12 @@ target_link_libraries(regime_generator PRIVATE adaptive_batcher)
 add_executable(market_simulator simulation/market_simulator.cpp)
 target_link_libraries(market_simulator PRIVATE adaptive_batcher)
 
+add_executable(validate_adaptive simulation/validate_adaptive.cpp)
+target_link_libraries(validate_adaptive PRIVATE adaptive_batcher)
+if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    target_compile_options(validate_adaptive PRIVATE -O3 -ffast-math)
+endif()
+
 # ─── Test infrastructure ──────────────────────────────────────────────────────
 enable_testing()
 include(GoogleTest)
